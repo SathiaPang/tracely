@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  background: #EDEAE3;
+  color: #1a1a18;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: #2C5F2D;
+  color: #fff;
+}
+
+input, select, textarea, button {
+  font-family: 'DM Sans', -apple-system, sans-serif;
+}
+
+a {
+  color: #2C5F2D;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
