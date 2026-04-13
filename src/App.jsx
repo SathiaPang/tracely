@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import Header from './components/Header'
-import ProductTracker from './pages/ProductTracker'
-import BMLog from './pages/BMLog'
+import Header from '../src/components/Header'
+import ProductTracker from '../src/pages/ProductTracker'
+import BMLog from '../src/pages/BMLog'
 
 function App() {
   const [activeTab, setActiveTab] = useState('products')
