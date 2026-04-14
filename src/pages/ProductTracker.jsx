@@ -4,12 +4,14 @@ import { competitorColors, categoryColors, getTag } from '../data/colors'
 import AddProductForm from '../components/AddProductForm'
 import FilterBar from '../components/FilterBar'
 import ProductDetail from '../components/ProductDetail'
+import ConfirmModal from '../components/ConfirmModal'
 
 function ProductTracker() {
     const [products, setProducts] = useState([])
     const [showForm, setShowForm] = useState(false)
     const [selectedId, setSelectedId] = useState(null)
     const [hoveredId, setHoveredId] = useState(null)
+    const [deleteId, setDeleteId] = useState(null)
     const [filters, setFilters] = useState({
         search: '',
         category: '',
@@ -26,12 +28,11 @@ function ProductTracker() {
         setShowForm(false)
     }
 
-    function handleDelete(id) {
-        if (window.confirm('Delete this product?')) {
-            deleteProduct(id)
-            setProducts(getProducts())
-            setSelectedId(null)
-        }
+    function handleDelete() {
+        deleteProduct(deleteId)
+        setProducts(getProducts())
+        setSelectedId(null)
+        setDeleteId(null)
     }
 
     const filtered = products.filter(p => {
@@ -52,7 +53,6 @@ function ProductTracker() {
 
     return (
         <div>
-            {/* Page header */}
             <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -119,15 +119,9 @@ function ProductTracker() {
                                         transition: 'background-color 0.15s'
                                     }}
                                 >
-                                    <td style={tdStyle}>
-                                        <span style={{ fontWeight: 600 }}>{product.productName}</span>
-                                    </td>
-                                    <td style={tdStyle}>
-                                        <span style={getTag(competitorColors, product.competitor)}>{product.competitor}</span>
-                                    </td>
-                                    <td style={tdStyle}>
-                                        <span style={getTag(categoryColors, product.category)}>{product.category}</span>
-                                    </td>
+                                    <td style={tdStyle}><span style={{ fontWeight: 600 }}>{product.productName}</span></td>
+                                    <td style={tdStyle}><span style={getTag(competitorColors, product.competitor)}>{product.competitor}</span></td>
+                                    <td style={tdStyle}><span style={getTag(categoryColors, product.category)}>{product.category}</span></td>
                                     <td style={{ ...tdStyle, color: '#999', fontSize: '13px' }}>{product.dateTracked}</td>
                                 </tr>
                             ))}
@@ -141,9 +135,17 @@ function ProductTracker() {
                     <ProductDetail
                         product={selectedProduct}
                         onClose={() => setSelectedId(null)}
-                        onDelete={handleDelete}
+                        onDelete={id => setDeleteId(id)}
                     />
                 </div>
+            )}
+
+            {deleteId && (
+                <ConfirmModal
+                    message="This product will be permanently deleted. This action cannot be undone."
+                    onConfirm={handleDelete}
+                    onCancel={() => setDeleteId(null)}
+                />
             )}
         </div>
     )

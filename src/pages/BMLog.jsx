@@ -4,12 +4,14 @@ import { competitorColors, categoryColors, activityColors, getTag } from '../dat
 import AddBMForm from '../components/AddBMForm'
 import FilterBar from '../components/FilterBar'
 import BMDetail from '../components/BMDetail'
+import ConfirmModal from '../components/ConfirmModal'
 
 function BMLog() {
     const [entries, setEntries] = useState([])
     const [showForm, setShowForm] = useState(false)
     const [selectedId, setSelectedId] = useState(null)
     const [hoveredId, setHoveredId] = useState(null)
+    const [deleteId, setDeleteId] = useState(null)
     const [filters, setFilters] = useState({
         search: '',
         category: '',
@@ -26,12 +28,11 @@ function BMLog() {
         setShowForm(false)
     }
 
-    function handleDelete(id) {
-        if (window.confirm('Delete this entry?')) {
-            deleteBMEntry(id)
-            setEntries(getBMEntries())
-            setSelectedId(null)
-        }
+    function handleDelete() {
+        deleteBMEntry(deleteId)
+        setEntries(getBMEntries())
+        setSelectedId(null)
+        setDeleteId(null)
     }
 
     const filtered = entries.filter(e => {
@@ -50,18 +51,13 @@ function BMLog() {
 
     const selectedEntry = entries.find(e => e.id === selectedId)
 
-    const activityCounts = {}
-    entries.forEach(e => {
-        activityCounts[e.activityType] = (activityCounts[e.activityType] || 0) + 1
-    })
-
     return (
         <div>
             <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                marginBottom: '20px'
+                marginBottom: '16px'
             }}>
                 <div>
                     <h2 style={{ margin: 0, fontSize: '22px', fontWeight: 700, letterSpacing: '-0.5px' }}>Brand & Marketing Log</h2>
@@ -154,9 +150,17 @@ function BMLog() {
                     <BMDetail
                         entry={selectedEntry}
                         onClose={() => setSelectedId(null)}
-                        onDelete={handleDelete}
+                        onDelete={id => setDeleteId(id)}
                     />
                 </div>
+            )}
+
+            {deleteId && (
+                <ConfirmModal
+                    message="This entry will be permanently deleted. This action cannot be undone."
+                    onConfirm={handleDelete}
+                    onCancel={() => setDeleteId(null)}
+                />
             )}
         </div>
     )
